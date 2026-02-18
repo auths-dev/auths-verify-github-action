@@ -32878,8 +32878,8 @@ const crypto = __importStar(__nccwpck_require__(6982));
 const fs = __importStar(__nccwpck_require__(9896));
 const path = __importStar(__nccwpck_require__(6928));
 const os = __importStar(__nccwpck_require__(857));
-// Repository that hosts the auths CLI releases
-const CLI_RELEASE_REPO = 'bordumb/auths';
+// Repository that hosts the public auths CLI releases
+const CLI_RELEASE_REPO = 'bordumb/auths-releases';
 /**
  * Classify a verification error string into a structured failure type.
  */

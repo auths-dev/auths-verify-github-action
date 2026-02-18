@@ -18,10 +18,10 @@ check-dist:
 ci: test build check-dist
 
 # Cut a release: test, build, commit dist, tag, push
-# Usage: just release 1.0.2
-release VERSION: ci
+# Usage: just release 1.0.3
+release VERSION: test build
     npm version {{VERSION}} --no-git-tag-version
-    git add package.json dist/
+    git add package.json dist/ src/ .github/ justfile
     git commit -m "Release v{{VERSION}}"
     git tag "v{{VERSION}}"
     git push && git push origin "v{{VERSION}}"
