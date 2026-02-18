@@ -18,7 +18,7 @@ check-dist:
 ci: test build check-dist
 
 # Cut a release: test, build, commit dist, tag, push
-# Usage: just release 1.2.3
+# Usage: just release 1.0.2
 release VERSION: ci
     npm version {{VERSION}} --no-git-tag-version
     git add package.json dist/
