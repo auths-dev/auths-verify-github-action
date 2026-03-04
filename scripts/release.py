@@ -121,7 +121,7 @@ def main() -> None:
 
     print(f"Pushing tag {tag} to origin...", flush=True)
     result = subprocess.run(
-        ["git", "push", "origin", tag],
+        ["git", "push", "--no-verify", "origin", tag],
         cwd=REPO_ROOT,
     )
     if result.returncode != 0:

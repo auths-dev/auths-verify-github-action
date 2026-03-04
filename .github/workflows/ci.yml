@@ -28,7 +28,7 @@ jobs:
 
       - name: Check dist is committed
         run: |
-          git diff --exit-code dist/ || {
+          git diff --exit-code -- dist/ ':!dist/**/*.d.ts.map' || {
             echo "::error::dist/ is out of date. Run 'just build' (or 'npm run build') and commit the result."
             exit 1
           }

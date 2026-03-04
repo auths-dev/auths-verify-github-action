@@ -32556,6 +32556,18 @@ async function run() {
         if (!commitRange) {
             commitRange = await getDefaultCommitRange();
         }
+        // Enforce bundle TTL before invoking CLI verification
+        if (resolvedBundlePath) {
+            const bundleContent = fs.readFileSync(resolvedBundlePath, 'utf8');
+            const bundleJson = JSON.parse(bundleContent);
+            const ageSeconds = (Date.now() - new Date(bundleJson.bundle_timestamp).getTime()) / 1000;
+            if (ageSeconds > bundleJson.max_valid_for_secs) {
+                core.error(`Bundle expired: ${Math.round(ageSeconds)}s old, max ${bundleJson.max_valid_for_secs}s. ` +
+                    `Refresh with: auths id export-bundle --alias <ALIAS> --output bundle.json --max-age-secs ${bundleJson.max_valid_for_secs}`);
+                core.setFailed('Stale identity bundle — verification aborted');
+                return;
+            }
+        }
         const verificationMode = resolvedBundlePath ? 'identity-bundle' : 'allowed-signers';
         core.info(`Verifying commits in range: ${commitRange}`);
         core.info(`Verification mode: ${verificationMode}`);
