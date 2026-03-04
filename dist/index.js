@@ -32663,12 +32663,12 @@ function fixMessageForType(type, commit, failedCount) {
                 ``,
                 `Install auths:`,
                 `  macOS:  brew install auths`,
-                `  Linux:  See https://github.com/bordumb/auths/releases/latest`,
+                `  Linux:  See https://github.com/auths-dev/auths/releases/latest`,
                 ``,
                 `Then re-sign and push:`,
                 `  ${amendCmd}`,
                 ``,
-                `Quickstart: https://github.com/bordumb/auths#quickstart`,
+                `Quickstart: https://github.com/auths-dev/auths#quickstart`,
             ].join('\n');
         case 'unknown_signer':
             return [
@@ -32735,14 +32735,14 @@ function buildSummaryMarkdown(results, passed, skipped, failed, total) {
                 lines.push(`Commit \`${firstFailed.commit.slice(0, 8)}\` is not signed. Install auths and re-sign:`);
                 lines.push('');
                 lines.push('**macOS:** `brew install auths`');
-                lines.push('**Linux:** Download from [releases](https://github.com/bordumb/auths/releases/latest)');
+                lines.push('**Linux:** Download from [releases](https://github.com/auths-dev/auths/releases/latest)');
                 lines.push('');
                 lines.push('Then re-sign:');
                 lines.push('```');
                 lines.push(amendCmd);
                 lines.push('```');
                 lines.push('');
-                lines.push('[Quickstart →](https://github.com/bordumb/auths#quickstart)');
+                lines.push('[Quickstart →](https://github.com/auths-dev/auths#quickstart)');
                 break;
             case 'unknown_signer':
                 lines.push(`Commit \`${firstFailed.commit.slice(0, 8)}\` is signed but the key is not in the allowed signers.`);
@@ -32879,7 +32879,7 @@ const fs = __importStar(__nccwpck_require__(9896));
 const path = __importStar(__nccwpck_require__(6928));
 const os = __importStar(__nccwpck_require__(857));
 // Repository that hosts the public auths CLI releases
-const CLI_RELEASE_REPO = 'bordumb/auths-releases';
+const CLI_RELEASE_REPO = 'auths-dev/auths-releases';
 /**
  * Classify a verification error string into a structured failure type.
  */

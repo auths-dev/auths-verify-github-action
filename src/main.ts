@@ -48,6 +48,21 @@ async function run(): Promise<void> {
       commitRange = await getDefaultCommitRange();
     }
 
+    // Enforce bundle TTL before invoking CLI verification
+    if (resolvedBundlePath) {
+      const bundleContent = fs.readFileSync(resolvedBundlePath, 'utf8');
+      const bundleJson = JSON.parse(bundleContent);
+      const ageSeconds = (Date.now() - new Date(bundleJson.bundle_timestamp).getTime()) / 1000;
+      if (ageSeconds > bundleJson.max_valid_for_secs) {
+        core.error(
+          `Bundle expired: ${Math.round(ageSeconds)}s old, max ${bundleJson.max_valid_for_secs}s. ` +
+          `Refresh with: auths id export-bundle --alias <ALIAS> --output bundle.json --max-age-secs ${bundleJson.max_valid_for_secs}`
+        );
+        core.setFailed('Stale identity bundle — verification aborted');
+        return;
+      }
+    }
+
     const verificationMode = resolvedBundlePath ? 'identity-bundle' : 'allowed-signers';
     core.info(`Verifying commits in range: ${commitRange}`);
     core.info(`Verification mode: ${verificationMode}`);
@@ -162,12 +177,12 @@ function fixMessageForType(type: FailureType, commit: string, failedCount: numbe
         ``,
         `Install auths:`,
         `  macOS:  brew install auths`,
-        `  Linux:  See https://github.com/bordumb/auths/releases/latest`,
+        `  Linux:  See https://github.com/auths-dev/auths/releases/latest`,
         ``,
         `Then re-sign and push:`,
         `  ${amendCmd}`,
         ``,
-        `Quickstart: https://github.com/bordumb/auths#quickstart`,
+        `Quickstart: https://github.com/auths-dev/auths#quickstart`,
       ].join('\n');
 
     case 'unknown_signer':
@@ -248,14 +263,14 @@ function buildSummaryMarkdown(
         lines.push(`Commit \`${firstFailed.commit.slice(0, 8)}\` is not signed. Install auths and re-sign:`);
         lines.push('');
         lines.push('**macOS:** `brew install auths`');
-        lines.push('**Linux:** Download from [releases](https://github.com/bordumb/auths/releases/latest)');
+        lines.push('**Linux:** Download from [releases](https://github.com/auths-dev/auths/releases/latest)');
         lines.push('');
         lines.push('Then re-sign:');
         lines.push('```');
         lines.push(amendCmd);
         lines.push('```');
         lines.push('');
-        lines.push('[Quickstart →](https://github.com/bordumb/auths#quickstart)');
+        lines.push('[Quickstart →](https://github.com/auths-dev/auths#quickstart)');
         break;
       case 'unknown_signer':
         lines.push(`Commit \`${firstFailed.commit.slice(0, 8)}\` is signed but the key is not in the allowed signers.`);

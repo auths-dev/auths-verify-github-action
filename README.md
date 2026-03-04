@@ -1,6 +1,6 @@
 # Auths Verify Action
 
-Verify commit signatures using [Auths](https://github.com/bordumb/auths) identity keys. Ensures every commit in a PR or push is cryptographically signed by an authorized developer.
+Verify commit signatures using [Auths](https://github.com/auths-dev/auths) identity keys. Ensures every commit in a PR or push is cryptographically signed by an authorized developer.
 
 ## Quickstart
 
@@ -8,7 +8,7 @@ Verify commit signatures using [Auths](https://github.com/bordumb/auths) identit
 - uses: actions/checkout@v4
   with:
     fetch-depth: 0
-- uses: bordumb/auths-verify-action@v1
+- uses: auths-dev/auths-verify-github-action@v1
   with:
     allowed-signers: '.auths/allowed_signers'
 ```
@@ -66,7 +66,7 @@ bob@example.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA...
 ```
 
 ```yaml
-- uses: bordumb/auths-verify-action@v1
+- uses: auths-dev/auths-verify-github-action@v1
   with:
     allowed-signers: '.auths/allowed_signers'
 ```
@@ -83,7 +83,7 @@ gh secret set AUTHS_IDENTITY_BUNDLE < bundle.json
 Then use the secret in your workflow:
 
 ```yaml
-- uses: bordumb/auths-verify-action@v1
+- uses: auths-dev/auths-verify-github-action@v1
   with:
     identity-bundle-json: ${{ secrets.AUTHS_IDENTITY_BUNDLE }}
 ```
@@ -91,7 +91,7 @@ Then use the secret in your workflow:
 Or commit the bundle (it contains only public data) and reference the file:
 
 ```yaml
-- uses: bordumb/auths-verify-action@v1
+- uses: auths-dev/auths-verify-github-action@v1
   with:
     identity-bundle: '.auths/identity-bundle.json'
 ```
@@ -115,7 +115,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: bordumb/auths-verify-action@v1
+      - uses: auths-dev/auths-verify-github-action@v1
         with:
           allowed-signers: '.auths/allowed_signers'
 ```
@@ -134,7 +134,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: bordumb/auths-verify-action@v1
+      - uses: auths-dev/auths-verify-github-action@v1
         with:
           identity-bundle-json: ${{ secrets.AUTHS_IDENTITY_BUNDLE }}
 ```
@@ -142,7 +142,7 @@ jobs:
 ### Non-blocking (Warn Only)
 
 ```yaml
-- uses: bordumb/auths-verify-action@v1
+- uses: auths-dev/auths-verify-github-action@v1
   with:
     allowed-signers: '.auths/allowed_signers'
     fail-on-unsigned: 'false'
@@ -164,7 +164,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: bordumb/auths-verify-action@v1
+      - uses: auths-dev/auths-verify-github-action@v1
         with:
           allowed-signers: '.auths/allowed_signers'
           post-pr-comment: 'true'
@@ -176,7 +176,7 @@ jobs:
 ```yaml
 - name: Verify commits
   id: verify
-  uses: bordumb/auths-verify-action@v1
+  uses: auths-dev/auths-verify-github-action@v1
   with:
     allowed-signers: '.auths/allowed_signers'
     fail-on-unsigned: 'false'
@@ -211,7 +211,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: bordumb/auths-verify-action@v1
+      - uses: auths-dev/auths-verify-github-action@v1
         with:
           identity-bundle-json: ${{ secrets.AUTHS_IDENTITY_BUNDLE }}
           fail-on-unsigned: ${{ inputs.mode == 'enforce' && 'true' || 'false' }}
@@ -252,6 +252,6 @@ Apache-2.0. See [LICENSE](LICENSE).
 
 ## Links
 
-- [Auths](https://github.com/bordumb/auths) - Decentralized identity for developers
-- [Auths CLI](https://github.com/bordumb/auths/tree/main/crates/auths-cli) - Command-line tool
-- [Signing commits with Auths](https://github.com/bordumb/auths#readme) - Setup guide
+- [Auths](https://github.com/auths-dev/auths) - Decentralized identity for developers
+- [Auths CLI](https://github.com/auths-dev/auths/tree/main/crates/auths-cli) - Command-line tool
+- [Signing commits with Auths](https://github.com/auths-dev/auths#readme) - Setup guide

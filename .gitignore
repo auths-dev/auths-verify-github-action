@@ -2,7 +2,13 @@
 node_modules/
 
 # Build output (committed only in the dedicated repo via sync script)
-dist/
+# dist/
 
 # TypeScript build info
 *.tsbuildinfo
+
+# TypeScript declaration sourcemaps (contain local build paths)
+dist/**/*.d.ts.map
+
+# Local tool directories
+.deepeval/

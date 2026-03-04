@@ -8,7 +8,7 @@ import * as path from 'path';
 import * as os from 'os';
 
 // Repository that hosts the public auths CLI releases
-const CLI_RELEASE_REPO = 'bordumb/auths-releases';
+const CLI_RELEASE_REPO = 'auths-dev/auths-releases';
 
 export type FailureType = 'unsigned' | 'unknown_signer' | 'invalid_signature' | 'error';
 
