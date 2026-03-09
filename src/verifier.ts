@@ -102,7 +102,17 @@ export async function verifyCommits(
   // Validate inputs
   if (!useIdentityBundle && !fs.existsSync(allowedSignersPath)) {
     core.warning(`Allowed signers file not found: ${allowedSignersPath}`);
-    core.warning('Create one with: echo "user@example.com ssh-ed25519 AAAA..." > .auths/allowed_signers');
+    core.warning(
+      'To set up commit verification:\n' +
+      '  1. auths init                                          # create identity\n' +
+      '  2. auths git allowed-signers -o .auths/allowed_signers # generate file\n' +
+      '  3. git add .auths/allowed_signers && git commit        # commit it\n' +
+      '\n' +
+      'Or use an identity bundle for stateless CI (no file needed):\n' +
+      '  auths id export-bundle --alias <ALIAS> --output bundle.json\n' +
+      '\n' +
+      'Docs: https://docs.auths.dev/cli/commands/advanced/#auths-git-allowed-signers'
+    );
 
     const commits = await getCommitsInRange(commitRange, skipMergeCommits);
     return commits.map(commit => ({
