@@ -60,7 +60,7 @@ describe('getAuthsDownloadUrl', () => {
 
     const url = getAuthsDownloadUrl('');
     expect(url).toBe(
-      'https://github.com/auths-dev/auths-releases/releases/latest/download/auths-linux-x86_64.tar.gz'
+      'https://github.com/auths-dev/auths/releases/latest/download/auths-linux-x86_64.tar.gz'
     );
   });
 
@@ -70,7 +70,7 @@ describe('getAuthsDownloadUrl', () => {
 
     const url = getAuthsDownloadUrl('');
     expect(url).toBe(
-      'https://github.com/auths-dev/auths-releases/releases/latest/download/auths-macos-aarch64.tar.gz'
+      'https://github.com/auths-dev/auths/releases/latest/download/auths-macos-aarch64.tar.gz'
     );
   });
 
@@ -80,7 +80,7 @@ describe('getAuthsDownloadUrl', () => {
 
     const url = getAuthsDownloadUrl('');
     expect(url).toBe(
-      'https://github.com/auths-dev/auths-releases/releases/latest/download/auths-windows-x86_64.zip'
+      'https://github.com/auths-dev/auths/releases/latest/download/auths-windows-x86_64.zip'
     );
   });
 
@@ -90,7 +90,7 @@ describe('getAuthsDownloadUrl', () => {
 
     const url = getAuthsDownloadUrl('0.5.0');
     expect(url).toBe(
-      'https://github.com/auths-dev/auths-releases/releases/download/v0.5.0/auths-linux-x86_64.tar.gz'
+      'https://github.com/auths-dev/auths/releases/download/v0.5.0/auths-linux-x86_64.tar.gz'
     );
   });
 
@@ -116,7 +116,7 @@ describe('getAuthsDownloadUrl', () => {
 
     const url = getAuthsDownloadUrl('');
     expect(url).toBe(
-      'https://github.com/auths-dev/auths-releases/releases/latest/download/auths-macos-x86_64.tar.gz'
+      'https://github.com/auths-dev/auths/releases/latest/download/auths-macos-x86_64.tar.gz'
     );
   });
 
@@ -126,7 +126,7 @@ describe('getAuthsDownloadUrl', () => {
 
     const url = getAuthsDownloadUrl('');
     expect(url).toBe(
-      'https://github.com/auths-dev/auths-releases/releases/latest/download/auths-linux-aarch64.tar.gz'
+      'https://github.com/auths-dev/auths/releases/latest/download/auths-linux-aarch64.tar.gz'
     );
   });
 });
