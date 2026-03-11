@@ -73,12 +73,12 @@ export async function runPreflightChecks(): Promise<void> {
     // git command failed, not necessarily a problem
   }
 
-  // Check for ssh-keygen (required by auths verify-commit)
+  // Check for ssh-keygen (required by auths verify)
   try {
     const sshKeygenPath = await io.which('ssh-keygen', false);
     if (!sshKeygenPath) {
       core.warning(
-        'ssh-keygen not found in PATH. The auths verify-commit command requires OpenSSH 8.0+.\n' +
+        'ssh-keygen not found in PATH. The auths verify command requires OpenSSH 8.0+.\n' +
         'GitHub-hosted runners include it by default. Self-hosted runners may need to install openssh-client.'
       );
     }
@@ -88,7 +88,7 @@ export async function runPreflightChecks(): Promise<void> {
 }
 
 /**
- * Verify commits in the given range using auths verify-commit
+ * Verify commits in the given range using auths verify
  */
 export async function verifyCommits(
   commitRange: string,
@@ -151,7 +151,7 @@ export async function verifyCommits(
   }
 
   // Build CLI arguments
-  const cliArgs = ['verify-commit'];
+  const cliArgs = ['verify'];
   if (useIdentityBundle) {
     cliArgs.push('--identity-bundle', identityBundlePath);
   } else {
@@ -159,7 +159,7 @@ export async function verifyCommits(
   }
   cliArgs.push('--json', commitRange);
 
-  // Run auths verify-commit with --json flag
+  // Run auths verify with --json flag
   let stdout = '';
   let stderr = '';
 
@@ -176,8 +176,8 @@ export async function verifyCommits(
       ignoreReturnCode: true
     });
   } catch (error) {
-    core.debug(`auths verify-commit stderr: ${stderr}`);
-    core.debug(`auths verify-commit stdout: ${stdout}`);
+    core.debug(`auths verify stderr: ${stderr}`);
+    core.debug(`auths verify stdout: ${stdout}`);
   }
 
   // Parse JSON output
@@ -244,7 +244,7 @@ async function verifyCommitsOneByOne(
     let stdout = '';
     let exitCode = 0;
 
-    const cliArgs = ['verify-commit'];
+    const cliArgs = ['verify'];
     if (useIdentityBundle) {
       cliArgs.push('--identity-bundle', identityBundlePath);
     } else {

@@ -39529,11 +39529,11 @@ async function runPreflightChecks() {
         }
         // git command failed, not necessarily a problem
     }
-    // Check for ssh-keygen (required by auths verify-commit)
+    // Check for ssh-keygen (required by auths verify)
     try {
         const sshKeygenPath = await io.which('ssh-keygen', false);
         if (!sshKeygenPath) {
-            core.warning('ssh-keygen not found in PATH. The auths verify-commit command requires OpenSSH 8.0+.\n' +
+            core.warning('ssh-keygen not found in PATH. The auths verify command requires OpenSSH 8.0+.\n' +
                 'GitHub-hosted runners include it by default. Self-hosted runners may need to install openssh-client.');
         }
     }
@@ -39542,7 +39542,7 @@ async function runPreflightChecks() {
     }
 }
 /**
- * Verify commits in the given range using auths verify-commit
+ * Verify commits in the given range using auths verify
  */
 async function verifyCommits(commitRange, options) {
     const { allowedSignersPath, identityBundlePath, skipMergeCommits } = options;
@@ -39591,7 +39591,7 @@ async function verifyCommits(commitRange, options) {
         return mergeResults;
     }
     // Build CLI arguments
-    const cliArgs = ['verify-commit'];
+    const cliArgs = ['verify'];
     if (useIdentityBundle) {
         cliArgs.push('--identity-bundle', identityBundlePath);
     }
@@ -39599,7 +39599,7 @@ async function verifyCommits(commitRange, options) {
         cliArgs.push('--allowed-signers', allowedSignersPath);
     }
     cliArgs.push('--json', commitRange);
-    // Run auths verify-commit with --json flag
+    // Run auths verify with --json flag
     let stdout = '';
     let stderr = '';
     try {
@@ -39616,8 +39616,8 @@ async function verifyCommits(commitRange, options) {
         });
     }
     catch (error) {
-        core.debug(`auths verify-commit stderr: ${stderr}`);
-        core.debug(`auths verify-commit stdout: ${stdout}`);
+        core.debug(`auths verify stderr: ${stderr}`);
+        core.debug(`auths verify stdout: ${stdout}`);
     }
     // Parse JSON output
     let verifyResults = [];
@@ -39676,7 +39676,7 @@ async function verifyCommitsOneByOne(authsPath, commits, options) {
     for (const commit of commits) {
         let stdout = '';
         let exitCode = 0;
-        const cliArgs = ['verify-commit'];
+        const cliArgs = ['verify'];
         if (useIdentityBundle) {
             cliArgs.push('--identity-bundle', identityBundlePath);
         }
