@@ -9,7 +9,7 @@ import * as path from 'path';
 import * as os from 'os';
 
 // Repository that hosts the public auths CLI releases
-const CLI_RELEASE_REPO = 'auths-dev/auths-releases';
+const CLI_RELEASE_REPO = 'auths-dev/auths';
 
 export type FailureType = 'unsigned' | 'unknown_signer' | 'invalid_signature' | 'error';
 
@@ -73,12 +73,12 @@ export async function runPreflightChecks(): Promise<void> {
     // git command failed, not necessarily a problem
   }
 
-  // Check for ssh-keygen (required by auths verify-commit)
+  // Check for ssh-keygen (required by auths verify)
   try {
     const sshKeygenPath = await io.which('ssh-keygen', false);
     if (!sshKeygenPath) {
       core.warning(
-        'ssh-keygen not found in PATH. The auths verify-commit command requires OpenSSH 8.0+.\n' +
+        'ssh-keygen not found in PATH. The auths verify command requires OpenSSH 8.0+.\n' +
         'GitHub-hosted runners include it by default. Self-hosted runners may need to install openssh-client.'
       );
     }
@@ -88,7 +88,7 @@ export async function runPreflightChecks(): Promise<void> {
 }
 
 /**
- * Verify commits in the given range using auths verify-commit
+ * Verify commits in the given range using auths verify
  */
 export async function verifyCommits(
   commitRange: string,
@@ -102,7 +102,17 @@ export async function verifyCommits(
   // Validate inputs
   if (!useIdentityBundle && !fs.existsSync(allowedSignersPath)) {
     core.warning(`Allowed signers file not found: ${allowedSignersPath}`);
-    core.warning('Create one with: echo "user@example.com ssh-ed25519 AAAA..." > .auths/allowed_signers');
+    core.warning(
+      'To set up commit verification:\n' +
+      '  1. auths init                                          # create identity\n' +
+      '  2. auths git allowed-signers -o .auths/allowed_signers # generate file\n' +
+      '  3. git add .auths/allowed_signers && git commit        # commit it\n' +
+      '\n' +
+      'Or use an identity bundle for stateless CI (no file needed):\n' +
+      '  auths id export-bundle --alias <ALIAS> --output bundle.json\n' +
+      '\n' +
+      'Docs: https://docs.auths.dev/cli/commands/advanced/#auths-git-allowed-signers'
+    );
 
     const commits = await getCommitsInRange(commitRange, skipMergeCommits);
     return commits.map(commit => ({
@@ -141,7 +151,7 @@ export async function verifyCommits(
   }
 
   // Build CLI arguments
-  const cliArgs = ['verify-commit'];
+  const cliArgs = ['verify'];
   if (useIdentityBundle) {
     cliArgs.push('--identity-bundle', identityBundlePath);
   } else {
@@ -149,7 +159,7 @@ export async function verifyCommits(
   }
   cliArgs.push('--json', commitRange);
 
-  // Run auths verify-commit with --json flag
+  // Run auths verify with --json flag
   let stdout = '';
   let stderr = '';
 
@@ -166,8 +176,8 @@ export async function verifyCommits(
       ignoreReturnCode: true
     });
   } catch (error) {
-    core.debug(`auths verify-commit stderr: ${stderr}`);
-    core.debug(`auths verify-commit stdout: ${stdout}`);
+    core.debug(`auths verify stderr: ${stderr}`);
+    core.debug(`auths verify stdout: ${stdout}`);
   }
 
   // Parse JSON output
@@ -234,7 +244,7 @@ async function verifyCommitsOneByOne(
     let stdout = '';
     let exitCode = 0;
 
-    const cliArgs = ['verify-commit'];
+    const cliArgs = ['verify'];
     if (useIdentityBundle) {
       cliArgs.push('--identity-bundle', identityBundlePath);
     } else {

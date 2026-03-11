@@ -23,7 +23,7 @@ export interface VerifyOptions {
  */
 export declare function runPreflightChecks(): Promise<void>;
 /**
- * Verify commits in the given range using auths verify-commit
+ * Verify commits in the given range using auths verify
  */
 export declare function verifyCommits(commitRange: string, options: VerifyOptions): Promise<VerificationResult[]>;
 /**
